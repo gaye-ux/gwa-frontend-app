@@ -24,6 +24,9 @@
     "scheme": "gwa",
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "plugins": [
+      "expo-router"
+    ]
   }
 }
