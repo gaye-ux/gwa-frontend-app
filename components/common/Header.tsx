@@ -3,10 +3,10 @@ import { View, Text, TouchableOpacity, Platform } from 'react-native';
 import { Feather, FontAwesome6 } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-export default function Header() {
-    const insets = useSafeAreaInsets();
+const ACTIVE_COLOR = '#E98C8C';
 
-    const BRAND_COLOR = '#E98C8C'; // Pink/Coral brand color from your image
+export function GlobalHeader() {
+    const insets = useSafeAreaInsets();
 
     return (
         <View
@@ -17,30 +17,26 @@ export default function Header() {
             }}
         >
             {/* Left Action: Hamburger Menu */}
-            <TouchableOpacity
-                activeOpacity={0.7}
-                className="w-10 h-10 items-start justify-center"
-            >
-                <Feather name="menu" size={26} color={BRAND_COLOR} />
+            <TouchableOpacity activeOpacity={0.7} className="w-10 h-10 items-start justify-center">
+                <Feather name="menu" size={26} color={ACTIVE_COLOR} />
             </TouchableOpacity>
 
-            {/* Center Branding: Bold, Italic Stylized Title */}
+            {/* Center Branding */}
             <View className="flex-1 items-center justify-center">
                 <Text
-                    style={{ color: BRAND_COLOR }}
+                    style={{ color: ACTIVE_COLOR }}
                     className="text-xl font-black italic tracking-widest text-center uppercase"
                 >
                     GWA Arena
                 </Text>
             </View>
 
-            {/* Right Action: Profile/Account Circle */}
-            <TouchableOpacity
-                activeOpacity={0.7}
-                className="w-10 h-10 items-end justify-center"
-            >
-                <FontAwesome6 name="circle-user" size={24} color={BRAND_COLOR} />
+            {/* Right Action: Profile */}
+            <TouchableOpacity activeOpacity={0.7} className="w-10 h-10 items-end justify-center">
+                <FontAwesome6 name="circle-user" size={24} color={ACTIVE_COLOR} />
             </TouchableOpacity>
         </View>
     );
 }
+
+export default GlobalHeader;
