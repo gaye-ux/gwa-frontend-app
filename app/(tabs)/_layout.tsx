@@ -1,8 +1,8 @@
 import { Tabs } from 'expo-router';
-import { Ionicons, MaterialCommunityIcons, MaterialIcons, Feather, FontAwesome6 } from '@expo/vector-icons';
-import { Platform, Text, View, TouchableOpacity } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import React from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Platform, Text, View, TouchableOpacity } from 'react-native';
+import { Ionicons, MaterialCommunityIcons, MaterialIcons, Feather, FontAwesome6 } from '@expo/vector-icons';
 
 type TabIconProps = {
     focused: boolean;
