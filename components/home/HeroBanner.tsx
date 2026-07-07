@@ -98,6 +98,12 @@ export default function HeroBanner() {
                     <TouchableOpacity
                         activeOpacity={0.85}
                         className="bg-gwa-red rounded-xl py-3.5 items-center mb-3"
+                        onPress={() =>
+                            router.push({
+                                pathname: '/(screens)/buy-tickets',
+                                params: { eventId: event.id },
+                            })
+                        }
                     >
                         <Text className="text-white text-base font-bold uppercase tracking-widest">
                             Buy Tickets

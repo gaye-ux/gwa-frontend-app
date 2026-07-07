@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import SectionHeader from './SectionHeader';
 import { arenaLiveMatch } from '@/services/homeData';
 
@@ -22,6 +23,8 @@ function LiveBadge() {
 // ArenaLiveCard
 // ---------------------------------------------------------------------------
 export default function ArenaLiveCard() {
+    const router = useRouter();
+
     return (
         <View className="mt-6">
             {/* Section Header */}
@@ -29,6 +32,7 @@ export default function ArenaLiveCard() {
                 title="ARENA LIVE"
                 actionText="Watch All"
                 icon={<LiveBadge />}
+                onAction={() => router.push('/(tabs)/live')}
             />
 
             {/* Card */}
@@ -45,6 +49,7 @@ export default function ArenaLiveCard() {
                     <View className="absolute inset-0 items-center justify-center">
                         <TouchableOpacity
                             activeOpacity={0.8}
+                            onPress={() => router.push('/(screens)/live-player')}
                             className="w-14 h-14 rounded-full bg-gwa-red/90 items-center justify-center"
                             style={{
                                 shadowColor: '#E53E3E',

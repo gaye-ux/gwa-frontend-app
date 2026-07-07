@@ -89,7 +89,12 @@ export default function UpcomingEventCard({ event }: UpcomingEventCardProps) {
                         title="Buy Tickets"
                         iconName="ticket-outline"
                         containerClassName="flex-1 ml-2"
-                        onPress={() => console.log('Buy Tickets pressed for', event.id)}
+                        onPress={() =>
+                            router.push({
+                                pathname: '/(screens)/buy-tickets',
+                                params: { eventId: event.id },
+                            })
+                        }
                     />
                 </View>
             </View>

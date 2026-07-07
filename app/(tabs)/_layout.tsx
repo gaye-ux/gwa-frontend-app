@@ -2,6 +2,7 @@ import React from 'react';
 import { Tabs } from 'expo-router';
 import { Platform, Text, View } from 'react-native';
 import { Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { GlobalHeader } from '@/components/common/Header';
 
@@ -33,6 +34,18 @@ function TabIcon({ focused, icon, label }: TabIconProps) {
 }
 
 export default function TabLayout() {
+    const insets = useSafeAreaInsets();
+
+    // --- Android Safe Area Logic ---
+    // Gesture navigation:  insets.bottom = 0  → float 12px off the screen edge
+    // 3-button nav bar:    insets.bottom ≈ 48px → sit 16px above it for clear separation
+    // iOS home indicator:  insets.bottom = 34px → standard 8px gap above bar
+    const tabBarBottom = Platform.OS === 'ios'
+        ? insets.bottom + 8
+        : Math.max(insets.bottom, 4);
+
+    const tabBarHeight = Platform.OS === 'ios' ? 70 : 60;
+
     return (
         <Tabs
             screenOptions={{
@@ -54,8 +67,8 @@ export default function TabLayout() {
                     borderColor: '#1E293B',
                     backgroundColor: '#0D1527',
                     shadowOffset: { width: 0, height: 6 },
-                    bottom: Platform.OS === 'ios' ? 28 : 10,
-                    height: Platform.OS === 'ios' ? 70 : 64,
+                    bottom: tabBarBottom,
+                    height: tabBarHeight,
                 },
             }}
         >
@@ -139,25 +152,6 @@ export default function TabLayout() {
                 }}
             />
 
-            <Tabs.Screen
-                name="media"
-                options={{
-                    title: 'Media',
-                    tabBarIcon: ({ focused }) => (
-                        <TabIcon
-                            focused={focused}
-                            label="Media"
-                            icon={
-                                <Ionicons
-                                    name={focused ? "play-circle" : "play-circle-outline"}
-                                    size={24}
-                                    color={focused ? ACTIVE_COLOR : INACTIVE_COLOR}
-                                />
-                            }
-                        />
-                    ),
-                }}
-            />
         </Tabs>
     );
 }

@@ -15,7 +15,21 @@ export default function RootLayout() {
             animation: 'slide_from_right',
           }}
         />
+        <Stack.Screen
+          name="(screens)/buy-tickets"
+          options={{
+            headerShown: false,
+            animation: 'slide_from_bottom', // Use a nice slide up for checkout
+          }}
+        />
         <Stack.Screen name="+not-found" options={{ title: 'Not Found' }} />
+        <Stack.Screen 
+          name="(screens)/live-player" 
+          options={{ 
+            presentation: 'modal',
+            animation: 'slide_from_bottom',
+          }} 
+        />
       </Stack>
     </>
   );

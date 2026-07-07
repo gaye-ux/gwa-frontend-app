@@ -15,6 +15,7 @@ export interface Fighter {
   height: string;
   age: number;
   image: any;
+  points?: number;
 }
 
 export interface Combat {
@@ -78,6 +79,14 @@ export interface ArenaPulseArticle {
   title: string;
   timestamp: string;
   author: string;
+}
+
+export interface Clan {
+  id: string;
+  name: string;
+  wins: number;
+  fights: number;
+  logo?: any;
 }
 
 // ---------------------------------------------------------------------------
@@ -279,5 +288,96 @@ export const upcomingEvents: GwaEvent[] = [
     tickets: currentEvent.tickets,
     combats: []
   }
+];
+
+export const fighterRankings: Fighter[] = [
+  {
+    name: 'MODOU LO',
+    nickname: 'The King of Thiaroye',
+    clan: 'CLAN ROCK ENERGY',
+    record: '22-3-0',
+    weight: '115 KG',
+    height: '1.85 M',
+    age: 35,
+    points: 1250,
+    image: require('@/assets/images/fighter_1.png'),
+  },
+  {
+    name: 'BALLA GAYE 2',
+    nickname: 'Lion of Guédiawaye',
+    clan: 'ECOLE BALLA GAYE',
+    record: '21-5-1',
+    weight: '120 KG',
+    height: '1.90 M',
+    age: 37,
+    points: 1120,
+    image: require('@/assets/images/fighter_2.png'),
+  },
+  {
+    name: 'EUMEU SENE',
+    nickname: 'Tay Shinger',
+    clan: 'CLAN TAY SHINGER',
+    record: '19-6-0',
+    weight: '110 KG',
+    height: '1.80 M',
+    age: 36,
+    points: 980,
+    image: require('@/assets/images/fighter_1.png'),
+  },
+  {
+    name: 'TAPHA TINE',
+    nickname: 'Giant of Baol',
+    clan: 'BAOL MBOLLO',
+    record: '16-7-2',
+    weight: '105 KG',
+    height: '1.78 M',
+    age: 34,
+    points: 850,
+    image: require('@/assets/images/fighter_2.png'),
+  },
+  {
+    name: 'GRIS BORDEAUX',
+    nickname: '3rd Tiger of Fass',
+    clan: 'FASS MBOLLO',
+    record: '18-4-0',
+    weight: '108 KG',
+    height: '1.82 M',
+    age: 33,
+    points: 810,
+    image: require('@/assets/images/fighter_1.png'),
+  },
+];
+
+export const clanRankings: Clan[] = [
+  {
+    id: 'clan-1',
+    name: 'CLAN ROCK ENERGY',
+    wins: 45,
+    fights: 60,
+  },
+  {
+    id: 'clan-2',
+    name: 'ECOLE BALLA GAYE',
+    wins: 38,
+    fights: 52,
+  },
+  {
+    id: 'clan-3',
+    name: 'FASS MBOLLO',
+    wins: 34,
+    fights: 55,
+  },
+  {
+    id: 'clan-4',
+    name: 'CLAN TAY SHINGER',
+    wins: 29,
+    fights: 41,
+  },
+  {
+    id: 'clan-5',
+    name: 'BAOL MBOLLO',
+    wins: 22,
+    fights: 39,
+  },
 ];
 
