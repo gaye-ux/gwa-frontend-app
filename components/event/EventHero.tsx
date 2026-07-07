@@ -10,50 +10,11 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 // Sub-components
 // ---------------------------------------------------------------------------
 
-function BadgePill({ text, color }: { text: string; color: string }) {
+function BadgePill({ text, bgClass, textClass }: { text: string; bgClass: string; textClass: string }) {
     return (
-        <View
-            className="rounded px-2.5 py-1 mr-2"
-            style={{ backgroundColor: color }}
-        >
-            <Text className="text-white text-[10px] font-extrabold uppercase tracking-wider">
+        <View className={`px-3 py-1 mr-2 rounded-sm ${bgClass}`}>
+            <Text className={`text-[10px] font-black uppercase tracking-wider ${textClass}`}>
                 {text}
-            </Text>
-        </View>
-    );
-}
-
-function TicketCard({
-    name,
-    price,
-    perks,
-    highlighted,
-}: {
-    name: string;
-    price: string;
-    perks: string;
-    highlighted?: boolean;
-}) {
-    return (
-        <View
-            className={`flex-1 rounded-xl py-3 px-2 items-center mx-1 border ${
-                highlighted
-                    ? 'bg-gwa-red/15 border-gwa-red/50'
-                    : 'bg-gwa-card border-gwa-border'
-            }`}
-        >
-            <Text className="text-gwa-muted text-[9px] font-bold uppercase tracking-widest mb-1">
-                {name}
-            </Text>
-            <Text
-                className={`text-xl font-black ${
-                    highlighted ? 'text-gwa-red' : 'text-white'
-                }`}
-            >
-                {price}
-            </Text>
-            <Text className="text-gwa-muted text-[9px] font-medium text-center mt-1 leading-3">
-                {perks}
             </Text>
         </View>
     );
@@ -67,65 +28,64 @@ export default function EventHero({ event }: { event: GwaEvent }) {
         <View style={{ width: SCREEN_WIDTH }}>
             <ImageBackground
                 source={event.heroImage}
-                style={{ width: SCREEN_WIDTH, height: SCREEN_WIDTH * 0.65 }}
+                style={{ width: SCREEN_WIDTH, height: SCREEN_WIDTH * 1.0 }}
                 resizeMode="cover"
             >
-                {/* Gradient overlay */}
+                {/* Gradient overlay to blend into the background below */}
                 <LinearGradient
                     colors={[
-                        'rgba(13,17,23,0.3)',
-                        'rgba(13,17,23,0.7)',
-                        '#0D1117',
+                        'transparent',
+                        'rgba(13,21,39,0.3)',
+                        'rgba(13,21,39,0.8)',
+                        '#0D1527',
                     ]}
-                    locations={[0, 0.6, 1]}
+                    locations={[0.4, 0.7, 0.9, 1]}
                     style={{ position: 'absolute', inset: 0 }}
                 />
 
-                {/* Badges at bottom of image */}
-                <View className="flex-1 justify-end px-5 pb-4">
+                {/* Content placed at the bottom of the image container */}
+                <View className="flex-1 justify-end px-5 pb-6">
+                    {/* Badges */}
+                    <View className="flex-row items-center mb-3">
+                        <BadgePill 
+                            text={`LIVE ${event.date}`} 
+                            bgClass="bg-[#E96677]" 
+                            textClass="text-white" 
+                        />
+                        <BadgePill 
+                            text={event.badge} 
+                            bgClass="bg-[#FBBF24]" 
+                            textClass="text-[#0D1527]" 
+                        />
+                    </View>
+
+                    {/* Title */}
+                    <Text 
+                        className="text-white font-black uppercase tracking-wide leading-none"
+                        style={{ fontSize: 44, fontStyle: 'italic', marginBottom: 12 }}
+                    >
+                        {event.title.split('\n').map((line, i) => (
+                            <Text key={i}>{line}{'\n'}</Text>
+                        ))}
+                    </Text>
+
+                    {/* Date & Venue Row */}
                     <View className="flex-row items-center">
-                        <BadgePill text="LIVE SOON" color="#E53E3E" />
-                        <BadgePill text={event.seriesName} color="rgba(30,41,59,0.8)" />
+                        <View className="flex-row items-center mr-4">
+                            <Ionicons name="calendar-outline" size={14} color="#8FA0BA" />
+                            <Text className="text-[#8FA0BA] text-[11px] font-bold tracking-widest uppercase ml-1.5">
+                                {event.date}
+                            </Text>
+                        </View>
+                        <View className="flex-row items-center">
+                            <Ionicons name="location-outline" size={14} color="#8FA0BA" />
+                            <Text className="text-[#8FA0BA] text-[11px] font-bold tracking-widest uppercase ml-1.5">
+                                {event.venue}
+                            </Text>
+                        </View>
                     </View>
                 </View>
             </ImageBackground>
-
-            {/* Content below image */}
-            <View className="px-5 -mt-1">
-                {/* Title */}
-                <Text className="text-white text-[26px] font-black uppercase leading-tight tracking-wide mt-2">
-                    {event.title}
-                </Text>
-
-                {/* Date & Time */}
-                <View className="flex-row items-center mt-3">
-                    <Ionicons name="calendar-outline" size={14} color="#8FA0BA" />
-                    <Text className="text-gwa-muted text-sm font-medium ml-1.5">
-                        {event.date} • {event.time}
-                    </Text>
-                </View>
-
-                {/* Venue */}
-                <View className="flex-row items-center mt-1.5">
-                    <Ionicons name="location-outline" size={14} color="#8FA0BA" />
-                    <Text className="text-gwa-muted text-sm font-medium ml-1.5">
-                        {event.venue}
-                    </Text>
-                </View>
-
-                {/* Ticket Tiers */}
-                <View className="flex-row mt-5 mx-[-4px]">
-                    {event.tickets.map((tier) => (
-                        <TicketCard
-                            key={tier.name}
-                            name={tier.name}
-                            price={tier.price}
-                            perks={tier.perks}
-                            highlighted={tier.highlighted}
-                        />
-                    ))}
-                </View>
-            </View>
         </View>
     );
 }

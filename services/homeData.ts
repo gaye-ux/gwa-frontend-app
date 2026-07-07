@@ -9,6 +9,7 @@
 export interface Fighter {
   name: string;
   nickname: string;
+  clan?: string;
   record: string;
   weight: string;
   height: string;
@@ -22,6 +23,9 @@ export interface Combat {
   fighter2: Fighter;
   isMainCombat: boolean;
   title?: string;
+  championship?: string;
+  odds1?: string;
+  odds2?: string;
 }
 
 export interface TicketTier {
@@ -92,12 +96,12 @@ export const currentEvent: GwaEvent = {
   id: 'event-1',
   badge: 'MAIN EVENT',
   seriesName: 'KING OF THE ARENA SERIES',
-  title: 'GRAND COMBAT:\nMODOU LO VS BALLA GAYE',
+  title: "THE TITAN'S CLASH",
   fighter1Name: 'MODOU LO',
   fighter2Name: 'BALLA GAYE',
-  date: 'AUG 24, 2026',
+  date: 'OCT 24',
   time: '18:00 GMT',
-  venue: 'Stade Leopold Sedar Senghor',
+  venue: 'INDEPENDENCE STADIUM',
   countdownTarget: '2026-08-24T18:00:00Z',
   heroImage: require('@/assets/images/hero_fighters.png'),
   startingPrice: 'D500',
@@ -124,9 +128,13 @@ export const currentEvent: GwaEvent = {
       id: 'combat-main',
       isMainCombat: true,
       title: 'HEAVYWEIGHT TITLE',
+      championship: 'HEAVYWEIGHT CHAMPIONSHIP',
+      odds1: '-140',
+      odds2: '+115',
       fighter1: {
         name: 'MODOU LO',
         nickname: 'The King of Thiaroye',
+        clan: 'CLAN ROCK ENERGY',
         record: '22-3-0',
         weight: '115 KG',
         height: '1.85 M',
@@ -134,8 +142,9 @@ export const currentEvent: GwaEvent = {
         image: require('@/assets/images/fighter_1.png'),
       },
       fighter2: {
-        name: 'BALLA GAYE II',
+        name: 'BALLA GAYE 2',
         nickname: 'Lion of Guédiawaye',
+        clan: 'ECOLE BALLA GAYE',
         record: '21-5-1',
         weight: '120 KG',
         height: '1.90 M',
@@ -146,9 +155,11 @@ export const currentEvent: GwaEvent = {
     {
       id: 'combat-2',
       isMainCombat: false,
+      championship: 'HEAVYWEIGHT BOUT',
       fighter1: {
-        name: 'Gris Bordeaux',
+        name: 'EUMEU SENE',
         nickname: '',
+        clan: 'CLAN TAY SHINGER',
         record: '18-4-0',
         weight: '108 KG',
         height: '1.82 M',
@@ -156,8 +167,9 @@ export const currentEvent: GwaEvent = {
         image: require('@/assets/images/fighter_1.png'),
       },
       fighter2: {
-        name: 'Lac de Guiers 2',
+        name: 'TAPHA TINE',
         nickname: '',
+        clan: 'BAOL MBOLLO',
         record: '15-3-1',
         weight: '112 KG',
         height: '1.88 M',
@@ -165,28 +177,7 @@ export const currentEvent: GwaEvent = {
         image: require('@/assets/images/fighter_2.png'),
       },
     },
-    {
-      id: 'combat-3',
-      isMainCombat: false,
-      fighter1: {
-        name: 'Eumeu Sene',
-        nickname: '',
-        record: '19-6-0',
-        weight: '110 KG',
-        height: '1.80 M',
-        age: 36,
-        image: require('@/assets/images/fighter_1.png'),
-      },
-      fighter2: {
-        name: 'Tapha Tine',
-        nickname: '',
-        record: '16-7-2',
-        weight: '105 KG',
-        height: '1.78 M',
-        age: 34,
-        image: require('@/assets/images/fighter_2.png'),
-      },
-    },
+
   ],
 };
 
@@ -253,3 +244,40 @@ export const arenaPulseArticles: ArenaPulseArticle[] = [
     author: 'Arena Report',
   },
 ];
+
+export const upcomingEvents: GwaEvent[] = [
+  currentEvent, // Modou Lo vs Balla Gaye
+  {
+    id: 'event-2',
+    badge: 'UNDERCARD SHOWCASE',
+    seriesName: 'Regional Featherweight Finals',
+    title: 'YOUNG LIONS DUEL',
+    fighter1Name: 'Gris Bordeaux',
+    fighter2Name: 'Lac de Guiers 2',
+    date: 'NOV 05',
+    time: '18:30 GMT',
+    venue: 'Serrekunda East Arena',
+    countdownTarget: '2026-11-05T18:30:00Z',
+    heroImage: require('@/assets/images/arena_live_thumb.png'), // Using existing image for variety
+    startingPrice: 'D250',
+    tickets: currentEvent.tickets, // Reusing mock tickets
+    combats: [] // Empty for now, or could fill with mock combats
+  },
+  {
+    id: 'event-3',
+    badge: 'LEGENDS INVITATIONAL',
+    seriesName: 'Heavyweight Icons Match',
+    title: 'LEGACY BOWL',
+    fighter1Name: 'Eumeu Sene',
+    fighter2Name: 'Tapha Tine',
+    date: 'DEC 12',
+    time: '21:00 GMT',
+    venue: 'The Grand Arena, Banjul',
+    countdownTarget: '2026-12-12T21:00:00Z',
+    heroImage: require('@/assets/images/calendar_event_2.png'), // Using existing image
+    startingPrice: 'D1000',
+    tickets: currentEvent.tickets,
+    combats: []
+  }
+];
+

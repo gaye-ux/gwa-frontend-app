@@ -1,13 +1,12 @@
 import React from 'react';
-import { View, ScrollView, TouchableOpacity } from 'react-native';
+import { View, ScrollView, TouchableOpacity, Text } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { currentEvent, getMainCombat } from '@/services/homeData';
+import { currentEvent } from '@/services/homeData';
 import EventHero from '@/components/event/EventHero';
-import MainMatchup from '@/components/event/MainMatchup';
-import FullFightCard from '@/components/event/FullFightCard';
+import CombatCard from '@/components/event/CombatCard';
 import BottomTicketBar from '@/components/event/BottomTicketBar';
 
 export default function EventDetailScreen() {
@@ -15,17 +14,15 @@ export default function EventDetailScreen() {
     const router = useRouter();
     const insets = useSafeAreaInsets();
 
-    // In a real app, fetch event by ID — for now, use dummy data
     const event = currentEvent;
-    const mainCombat = getMainCombat(event);
 
     return (
-        <View className="flex-1 bg-gwa-dark">
+        <View className="flex-1 bg-[#0D1527]">
             {/* Back button — floating over hero */}
             <TouchableOpacity
                 onPress={() => router.back()}
                 activeOpacity={0.7}
-                className="absolute z-50 bg-gwa-dark/60 rounded-full w-10 h-10 items-center justify-center"
+                className="absolute z-50 bg-black/40 rounded-full w-10 h-10 items-center justify-center"
                 style={{
                     top: insets.top + 8,
                     left: 16,
@@ -37,20 +34,31 @@ export default function EventDetailScreen() {
             <ScrollView
                 className="flex-1"
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: 100 }}
+                contentContainerStyle={{ paddingBottom: 120 }} // Space for sticky bottom bar
             >
-                {/* Event Hero — Stadium bg, badges, title, tickets */}
+                {/* Event Hero */}
                 <EventHero event={event} />
 
-                {/* Main Combat Matchup */}
-                {mainCombat && <MainMatchup combat={mainCombat} />}
+                {/* Combats Section */}
+                <View className="px-5 mt-8">
+                    {/* Section Header */}
+                    <View className="flex-row items-center mb-5">
+                        {/* Pink vertical bar */}
+                        <View className="w-1 h-5 bg-[#E96677] mr-2" />
+                        <Text className="text-[#89B4E5] text-[15px] font-black italic tracking-wide uppercase">
+                            Combats of the event
+                        </Text>
+                    </View>
 
-                {/* Full Fight Card */}
-                <FullFightCard combats={event.combats} />
+                    {/* Combat Cards */}
+                    {event.combats.map((combat) => (
+                        <CombatCard key={combat.id} combat={combat} />
+                    ))}
+                </View>
             </ScrollView>
 
             {/* Sticky bottom ticket bar */}
-            <BottomTicketBar startingPrice={event.startingPrice} />
+            <BottomTicketBar />
         </View>
     );
 }
