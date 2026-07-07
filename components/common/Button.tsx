@@ -8,17 +8,17 @@ interface ButtonProps {
     iconName?: keyof typeof Ionicons.glyphMap;
     containerClassName?: string;
     textClassName?: string;
-    color?: string; // Optional hex or named color to override the default button color
-    textColor?: string; // Optional hex or named color to override the default text/icon color
+    color?: string;
+    textColor?: string;
 }
 
-export function PrimaryButton({ 
-    title, 
-    onPress, 
-    iconName, 
-    containerClassName = '', 
+export function PrimaryButton({
+    title,
+    onPress,
+    iconName,
+    containerClassName = '',
     textClassName = '',
-    color = '#E53E3E', // Default to "Buy Ticket" red color
+    color = '#E53E3E',
     textColor = 'white'
 }: ButtonProps) {
     return (
@@ -29,7 +29,7 @@ export function PrimaryButton({
             style={{ backgroundColor: color }}
         >
             {iconName && <Ionicons name={iconName} size={16} color={textColor} style={{ marginRight: 6 }} />}
-            <Text 
+            <Text
                 className={`font-bold text-sm tracking-wider uppercase ${textClassName}`}
                 style={{ color: textColor }}
             >
@@ -39,11 +39,11 @@ export function PrimaryButton({
     );
 }
 
-export function OutlineButton({ 
-    title, 
-    onPress, 
-    iconName, 
-    containerClassName = '', 
+export function OutlineButton({
+    title,
+    onPress,
+    iconName,
+    containerClassName = '',
     textClassName = '',
     color = '#1E293B', // Default to gwa-border color
     textColor = 'white'
@@ -56,7 +56,7 @@ export function OutlineButton({
             style={{ borderColor: color }}
         >
             {iconName && <Ionicons name={iconName} size={16} color={textColor} style={{ marginRight: 6 }} />}
-            <Text 
+            <Text
                 className={`font-bold text-sm tracking-wider uppercase ${textClassName}`}
                 style={{ color: textColor }}
             >
