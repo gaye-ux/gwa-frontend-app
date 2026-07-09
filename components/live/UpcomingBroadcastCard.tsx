@@ -1,22 +1,21 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { SeasonCalendarEvent } from '@/services/homeData';
+import { SeasonEvent } from '@/services/types';
 
 interface UpcomingBroadcastCardProps {
-    event: SeasonCalendarEvent;
+    event: SeasonEvent;
 }
 
 export default function UpcomingBroadcastCard({ event }: UpcomingBroadcastCardProps) {
     return (
         <TouchableOpacity
             activeOpacity={0.8}
-            className="flex-row items-center bg-[#18233A] border border-[#1E293B] rounded-xl p-3 mb-3"
+            className="flex-row items-center bg-gwa-card border border-gwa-border rounded-xl p-3 mb-3"
         >
-            {/* Thumbnail */}
-            <View className="relative w-24 h-16 rounded-lg overflow-hidden mr-4 border border-[#1E293B]">
-                <Image 
-                    source={event.thumbnail} 
+            <View className="relative w-24 h-16 rounded-lg overflow-hidden mr-4 border border-gwa-border">
+                <Image
+                    source={event.thumbnail}
                     className="w-full h-full"
                     resizeMode="cover"
                 />
@@ -25,7 +24,6 @@ export default function UpcomingBroadcastCard({ event }: UpcomingBroadcastCardPr
                 </View>
             </View>
 
-            {/* Details */}
             <View className="flex-1 justify-center">
                 <Text className="text-[#FBBF24] text-[9px] font-bold uppercase tracking-widest mb-1">
                     {event.type}
@@ -33,17 +31,16 @@ export default function UpcomingBroadcastCard({ event }: UpcomingBroadcastCardPr
                 <Text className="text-white text-sm font-black uppercase italic tracking-wide mb-1" numberOfLines={1}>
                     {event.title}
                 </Text>
-                
+
                 <View className="flex-row items-center">
                     <Ionicons name="calendar-outline" size={10} color="#8FA0BA" />
-                    <Text className="text-[#8FA0BA] text-[10px] font-bold uppercase tracking-widest ml-1 mr-3">
+                    <Text className="text-gwa-muted text-[10px] font-bold uppercase tracking-widest ml-1 mr-3">
                         {event.date}
                     </Text>
                 </View>
             </View>
-            
-            {/* Notification Bell */}
-            <View className="w-8 h-8 rounded-full bg-[#0D1527] border border-[#1E293B] items-center justify-center">
+
+            <View className="w-8 h-8 rounded-full bg-gwa-dark border border-gwa-border items-center justify-center">
                 <Ionicons name="notifications-outline" size={14} color="#8FA0BA" />
             </View>
         </TouchableOpacity>

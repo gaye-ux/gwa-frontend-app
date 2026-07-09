@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text, ImageBackground, Dimensions } from 'react-native';
+import { View, Text, ImageBackground, TouchableOpacity, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Combat } from '@/services/homeData';
+import { useRouter } from 'expo-router';
+import { Combat } from '@/services/types';
+import { getWrestler } from '@/services/data';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -10,19 +12,26 @@ interface CombatCardProps {
 }
 
 export default function CombatCard({ combat }: CombatCardProps) {
+    const router = useRouter();
     const isMainEvent = combat.isMainCombat;
-    // Calculate card width allowing for horizontal padding on the screen
-    const containerWidth = SCREEN_WIDTH - 40; 
+    const containerWidth = SCREEN_WIDTH - 40;
     const halfWidth = containerWidth / 2;
 
+    const fighter1 = getWrestler(combat.fighter1Id);
+    const fighter2 = getWrestler(combat.fighter2Id);
+
+    if (!fighter1 || !fighter2) return null;
+
     return (
-        <View className="mb-6 rounded overflow-hidden">
-            
+        <TouchableOpacity
+            activeOpacity={0.85}
+            onPress={() => router.push(`/(screens)/combat-detail?id=${combat.id}` as any)}
+            className="mb-6 rounded overflow-hidden"
+        >
             {/* Split Images Section */}
             <View className="flex-row relative" style={{ height: 180 }}>
-                {/* Fighter 1 (Left) */}
                 <ImageBackground
-                    source={combat.fighter1.image}
+                    source={fighter1.image}
                     style={{ width: halfWidth, height: '100%' }}
                     resizeMode="cover"
                 >
@@ -33,20 +42,18 @@ export default function CombatCard({ combat }: CombatCardProps) {
                     />
                     <View className="absolute bottom-2 left-3">
                         <Text className="text-white text-base font-black italic tracking-wide uppercase">
-                            {combat.fighter1.name}
+                            {fighter1.name}
                         </Text>
                         <Text className="text-[#F97316] text-[9px] font-bold tracking-widest uppercase mt-0.5">
-                            {combat.fighter1.clan}
+                            {fighter1.ekiriName}
                         </Text>
                     </View>
                 </ImageBackground>
 
-                {/* Vertical Divider Line (Subtle) */}
                 <View className="absolute top-0 bottom-0 left-[50%] w-[1px] bg-white/10 z-10" />
 
-                {/* Fighter 2 (Right) */}
                 <ImageBackground
-                    source={combat.fighter2.image}
+                    source={fighter2.image}
                     style={{ width: halfWidth, height: '100%' }}
                     resizeMode="cover"
                 >
@@ -57,25 +64,22 @@ export default function CombatCard({ combat }: CombatCardProps) {
                     />
                     <View className="absolute bottom-2 right-3 items-end">
                         <Text className="text-white text-base font-black italic tracking-wide uppercase">
-                            {combat.fighter2.name}
+                            {fighter2.name}
                         </Text>
                         <Text className="text-[#FBBF24] text-[9px] font-bold tracking-widest uppercase mt-0.5">
-                            {combat.fighter2.clan}
+                            {fighter2.ekiriName}
                         </Text>
                     </View>
                 </ImageBackground>
 
-                {/* Center VS Badge */}
-                <View 
-                    className="absolute top-[40%] left-[50%] z-20 items-center justify-center shadow-lg shadow-black/50"
-                    style={{ 
-                        transform: [{ translateX: -18 }, { translateY: -14 }, { skewX: '-10deg' }] 
+                <View
+                    className="absolute top-[40%] left-[50%] z-20 items-center justify-center"
+                    style={{
+                        transform: [{ translateX: -18 }, { translateY: -14 }, { skewX: '-10deg' }]
                     }}
                 >
-                    <View 
-                        className={`px-2 py-1 ${isMainEvent ? 'bg-[#FFB1B1]' : 'bg-white'}`}
-                    >
-                        <Text 
+                    <View className={`px-2 py-1 ${isMainEvent ? 'bg-[#FFB1B1]' : 'bg-white'}`}>
+                        <Text
                             className={`text-[13px] font-black italic ${isMainEvent ? 'text-[#D80027]' : 'text-[#0D1527]'}`}
                             style={{ transform: [{ skewX: '10deg' }] }}
                         >
@@ -85,13 +89,17 @@ export default function CombatCard({ combat }: CombatCardProps) {
                 </View>
             </View>
 
-            {/* Bottom Bar Section */}
+            {/* Bottom Bar */}
             <View className="bg-[#18233A] px-4 py-3 flex-row items-center justify-between">
-                <Text className={`text-[10px] font-extrabold uppercase tracking-widest ${isMainEvent ? 'text-[#F97316]' : 'text-[#64748B]'}`}>
-                    {combat.championship}
-                </Text>
+                <View className="flex-row items-center">
+                    <View className={`w-2 h-2 rounded-full mr-2 ${
+                        combat.status === 'live' ? 'bg-gwa-live' : combat.status === 'finished' ? 'bg-green-400' : 'bg-gwa-muted'
+                    }`} />
+                    <Text className={`text-[10px] font-extrabold uppercase tracking-widest ${isMainEvent ? 'text-[#F97316]' : 'text-[#64748B]'}`}>
+                        {combat.championship || 'Combat'}
+                    </Text>
+                </View>
 
-                {/* Odds (If available) */}
                 {combat.odds1 && combat.odds2 && (
                     <View className="flex-row items-center">
                         <View className="items-center mr-4">
@@ -105,7 +113,6 @@ export default function CombatCard({ combat }: CombatCardProps) {
                     </View>
                 )}
             </View>
-
-        </View>
+        </TouchableOpacity>
     );
 }

@@ -1,13 +1,11 @@
 import React from 'react';
 import { View, Text, Image, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Combat } from '@/services/homeData';
+import { Combat } from '@/services/types';
+import { getWrestler } from '@/services/data';
 
 const CARD_WIDTH = (Dimensions.get('window').width - 40) / 2;
 
-// ---------------------------------------------------------------------------
-// Stat Row
-// ---------------------------------------------------------------------------
 function StatRow({
     left,
     label,
@@ -19,28 +17,21 @@ function StatRow({
 }) {
     return (
         <View className="flex-row items-center justify-between py-2 border-b border-gwa-border/50">
-            <Text className="text-white text-sm font-bold flex-1 text-left">
-                {left}
-            </Text>
-            <Text className="text-gwa-muted text-xs font-semibold uppercase tracking-wider flex-1 text-center">
-                {label}
-            </Text>
-            <Text className="text-white text-sm font-bold flex-1 text-right">
-                {right}
-            </Text>
+            <Text className="text-white text-sm font-bold flex-1 text-left">{left}</Text>
+            <Text className="text-gwa-muted text-xs font-semibold uppercase tracking-wider flex-1 text-center">{label}</Text>
+            <Text className="text-white text-sm font-bold flex-1 text-right">{right}</Text>
         </View>
     );
 }
 
-// ---------------------------------------------------------------------------
-// MainMatchup
-// ---------------------------------------------------------------------------
 export default function MainMatchup({ combat }: { combat: Combat }) {
-    const { fighter1, fighter2 } = combat;
+    const fighter1 = getWrestler(combat.fighter1Id);
+    const fighter2 = getWrestler(combat.fighter2Id);
+
+    if (!fighter1 || !fighter2) return null;
 
     return (
         <View className="mt-8 px-5">
-            {/* Section header */}
             <View className="flex-row items-center justify-between mb-4">
                 <Text className="text-white text-lg font-black italic uppercase tracking-wide">
                     Main Event{'\n'}Matchup
@@ -54,10 +45,8 @@ export default function MainMatchup({ combat }: { combat: Combat }) {
                 )}
             </View>
 
-            {/* Fighter portraits */}
             <View className="bg-gwa-card rounded-2xl overflow-hidden border border-gwa-border">
                 <View className="flex-row items-end justify-center relative" style={{ height: 220 }}>
-                    {/* Fighter 1 */}
                     <View className="flex-1 items-center">
                         <Image
                             source={fighter1.image}
@@ -66,11 +55,7 @@ export default function MainMatchup({ combat }: { combat: Combat }) {
                         />
                     </View>
 
-                    {/* VS Badge — centered overlay */}
-                    <View
-                        className="absolute z-10 items-center justify-center"
-                        style={{ top: '40%' }}
-                    >
+                    <View className="absolute z-10 items-center justify-center" style={{ top: '40%' }}>
                         <View className="w-12 h-12 rounded-full bg-gwa-red items-center justify-center"
                             style={{
                                 shadowColor: '#E53E3E',
@@ -84,7 +69,6 @@ export default function MainMatchup({ combat }: { combat: Combat }) {
                         </View>
                     </View>
 
-                    {/* Fighter 2 */}
                     <View className="flex-1 items-center">
                         <Image
                             source={fighter2.image}
@@ -93,7 +77,6 @@ export default function MainMatchup({ combat }: { combat: Combat }) {
                         />
                     </View>
 
-                    {/* Bottom gradient */}
                     <LinearGradient
                         colors={['transparent', 'rgba(19,27,46,1)']}
                         style={{
@@ -106,7 +89,6 @@ export default function MainMatchup({ combat }: { combat: Combat }) {
                     />
                 </View>
 
-                {/* Fighter names & nicknames */}
                 <View className="flex-row justify-between px-4 -mt-6 z-20">
                     <View className="flex-1">
                         <Text className="text-[10px] text-gwa-muted font-medium italic uppercase tracking-wider">
@@ -126,16 +108,15 @@ export default function MainMatchup({ combat }: { combat: Combat }) {
                     </View>
                 </View>
 
-                {/* Stats comparison */}
                 <View className="px-4 mt-4 pb-4">
-                    <StatRow left={fighter1.record} label="Record" right={fighter2.record} />
+                    <StatRow
+                        left={`${fighter1.wins}-${fighter1.losses}-${fighter1.draws}`}
+                        label="Record"
+                        right={`${fighter2.wins}-${fighter2.losses}-${fighter2.draws}`}
+                    />
                     <StatRow left={fighter1.weight} label="Weight" right={fighter2.weight} />
                     <StatRow left={fighter1.height} label="Height" right={fighter2.height} />
-                    <StatRow
-                        left={String(fighter1.age)}
-                        label="Age"
-                        right={String(fighter2.age)}
-                    />
+                    <StatRow left={String(fighter1.age)} label="Age" right={String(fighter2.age)} />
                 </View>
             </View>
         </View>
