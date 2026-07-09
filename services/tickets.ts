@@ -36,7 +36,7 @@ export interface PurchaseResponse {
 
 export async function fetchTicketTiers(eventId: string): Promise<TicketTier[]> {
   try {
-    const res = await BE.get<{ ticketTiers: TicketTierData[] }>(`/tickets/tiers/${eventId}`);
+    const res = await BE.get<{ ticketTiers: TicketTierData[] }>(`/tickets/events/${eventId}/tiers`);
     return res.ticketTiers.map((t, i) => ({
       id: t.id,
       name: t.name,
