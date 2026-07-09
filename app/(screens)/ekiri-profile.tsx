@@ -1,21 +1,39 @@
-import React from 'react';
-import { ScrollView, View, Text, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, View, Text, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { getEkiri } from '@/services/data';
-import { getWrestlersByEkiri } from '@/services/data';
+import { fetchEkiri } from '@/services/dataService';
 import { EkiriCard } from '@/components/ekiri/EkiriCard';
 import { EmptyState } from '@/components/common/EmptyState';
+import type { Ekiri } from '@/services/types';
 
 export default function EkiriProfileScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const [ekiri, setEkiri] = useState<Ekiri | null>(null);
+  const [members, setMembers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const ekiri = getEkiri(id || '');
-  const members = ekiri ? getWrestlersByEkiri(ekiri.id) : [];
+  useEffect(() => {
+    if (!id) return;
+    fetchEkiri(id).then(e => {
+      if (e) {
+        setEkiri(e);
+        setMembers((e as any).__members || []);
+      }
+    }).catch(() => {}).finally(() => setLoading(false));
+  }, [id]);
+
+  if (loading) {
+    return (
+      <View className="flex-1 bg-gwa-dark items-center justify-center" style={{ paddingTop: insets.top }}>
+        <ActivityIndicator size="large" color="#E53E3E" />
+      </View>
+    );
+  }
 
   if (!ekiri) {
     return (
@@ -28,101 +46,51 @@ export default function EkiriProfileScreen() {
   return (
     <View className="flex-1 bg-gwa-dark">
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
-        {/* Banner */}
         <View className="relative h-48">
           <View className="w-full h-full" style={{ backgroundColor: ekiri.bannerColor }} />
-          <LinearGradient
-            colors={['transparent', '#0D1117']}
-            className="absolute inset-0"
-            locations={[0.4, 1]}
-          />
-          <TouchableOpacity
-            onPress={() => router.back()}
-            className="absolute top-4 left-4 w-10 h-10 rounded-full bg-black/50 items-center justify-center"
-            activeOpacity={0.7}
-          >
-            <Ionicons name="arrow-back" size={22} color="white" />
+          <LinearGradient colors={['transparent', '#0D1117']} className="absolute inset-0" locations={[0.4, 1]} />
+          <TouchableOpacity onPress={() => router.back()}
+            className="absolute top-12 left-4 z-20 bg-black/40 rounded-full w-10 h-10 items-center justify-center">
+            <Ionicons name="chevron-back" size={24} color="#fff" />
           </TouchableOpacity>
+        </View>
 
-          <View className="absolute bottom-0 left-0 right-0 px-6 pb-5">
-            <View className="flex-row items-end justify-between">
-              <View className="flex-row items-center flex-1">
-                <View className="w-16 h-16 rounded-full border-2 border-white/30 overflow-hidden bg-gwa-card">
-                  <Image source={ekiri.logo} className="w-full h-full" resizeMode="cover" />
-                </View>
-                <View className="ml-4">
-                  <Text className="text-white text-2xl font-black">{ekiri.name}</Text>
-                  <Text className="text-white/80 text-sm">{ekiri.location}</Text>
-                </View>
-              </View>
-              <View className="bg-white/20 px-3 py-1.5 rounded-full">
-                <Text className="text-white text-xs font-bold">#{ekiri.ranking}</Text>
-              </View>
+        <View className="items-center -mt-16 z-10 px-5">
+          <Image source={ekiri.logo} className="w-24 h-24 rounded-2xl border-2 border-gwa-border mb-4" />
+          <Text className="text-white text-2xl font-black uppercase tracking-widest mb-1">{ekiri.name}</Text>
+          <View className="flex-row items-center gap-4 mt-1">
+            <View className="flex-row items-center">
+              <Ionicons name="location-outline" size={14} color="#8FA0BA" />
+              <Text className="text-gwa-muted text-xs font-medium ml-1">{ekiri.location}</Text>
+            </View>
+            <View className="flex-row items-center">
+              <Ionicons name="flag-outline" size={14} color="#8FA0BA" />
+              <Text className="text-gwa-muted text-xs font-medium ml-1">Rank #{ekiri.ranking}</Text>
             </View>
           </View>
         </View>
 
-        <View className="px-5 -mt-2">
-          {/* Quick Stats */}
-          <View className="bg-gwa-card rounded-2xl border border-gwa-border p-5 mb-4">
-            <View className="flex-row">
-              <View className="flex-1 items-center">
-                <Text className="text-white text-2xl font-black">{ekiri.totalVictories}</Text>
-                <Text className="text-gwa-muted text-xs uppercase tracking-wider mt-1">Total Wins</Text>
-              </View>
-              <View className="flex-1 items-center border-x border-gwa-border">
-                <Text className="text-white text-2xl font-black">{ekiri.totalTitles}</Text>
-                <Text className="text-gwa-muted text-xs uppercase tracking-wider mt-1">Titles</Text>
-              </View>
-              <View className="flex-1 items-center">
-                <Text className="text-white text-2xl font-black">{ekiri.totalFights}</Text>
-                <Text className="text-gwa-muted text-xs uppercase tracking-wider mt-1">Fights</Text>
-              </View>
-            </View>
+        {ekiri.description ? (
+          <View className="px-5 mt-6">
+            <Text className="text-white text-base font-bold mb-2">About</Text>
+            <Text className="text-gwa-muted text-sm leading-relaxed">{ekiri.description}</Text>
           </View>
+        ) : null}
 
-          {/* Description & History */}
-          <View className="bg-gwa-card rounded-2xl border border-gwa-border p-5 mb-4">
-            <Text className="text-white text-sm font-bold tracking-wider uppercase mb-3">About</Text>
-            <Text className="text-gray-300 text-sm leading-6 mb-4">{ekiri.description}</Text>
-            <Text className="text-white text-sm font-bold tracking-wider uppercase mb-3">History</Text>
-            <Text className="text-gray-300 text-sm leading-6">{ekiri.history}</Text>
-
-            <View className="flex-row items-center mt-4 pt-4 border-t border-gwa-border gap-4">
-              <View className="flex-row items-center">
-                <Ionicons name="calendar-outline" size={14} color="#8FA0BA" />
-                <Text className="text-gwa-muted text-xs ml-1">Founded {ekiri.founded}</Text>
+        {members.length > 0 && (
+          <View className="px-5 mt-8">
+            <Text className="text-white text-base font-bold mb-4 uppercase tracking-wider">Members ({members.length})</Text>
+            {members.map((w: any) => (
+              <View key={w.id} className="flex-row items-center bg-gwa-card rounded-2xl p-4 mb-3 border border-gwa-border">
+                <Image source={w.image} className="w-12 h-12 rounded-full" resizeMode="cover" />
+                <View className="ml-3 flex-1">
+                  <Text className="text-white text-sm font-bold uppercase">{w.name}</Text>
+                  <Text className="text-gwa-muted text-xs">{w.nickname} · #{w.currentRanking}</Text>
+                </View>
               </View>
-              <View className="flex-row items-center">
-                <Ionicons name="location-outline" size={14} color="#8FA0BA" />
-                <Text className="text-gwa-muted text-xs ml-1">{ekiri.coach}</Text>
-              </View>
-            </View>
+            ))}
           </View>
-
-          {/* Wrestlers */}
-          <Text className="text-white text-sm font-bold tracking-wider uppercase mb-3 ml-1">
-            Wrestlers ({members.length})
-          </Text>
-          {members.map((w) => (
-            <TouchableOpacity
-              key={w.id}
-              onPress={() => router.push(`/(screens)/wrestler-profile?id=${w.id}` as any)}
-              className="bg-gwa-card rounded-xl border border-gwa-border p-4 mb-2 flex-row items-center"
-              activeOpacity={0.7}
-            >
-              <Image source={w.image} className="w-12 h-12 rounded-full" />
-              <View className="flex-1 ml-3">
-                <Text className="text-white text-sm font-bold">{w.name}</Text>
-                <Text className="text-gwa-muted text-xs mt-0.5">"{w.nickname}"</Text>
-              </View>
-              <View className="items-end">
-                <Text className="text-white text-xs font-bold">#{w.currentRanking}</Text>
-                <Text className="text-gwa-muted text-[10px]">{w.wins}-{w.losses}-{w.draws}</Text>
-              </View>
-            </TouchableOpacity>
-          ))}
-        </View>
+        )}
       </ScrollView>
     </View>
   );

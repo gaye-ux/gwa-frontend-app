@@ -2,10 +2,12 @@ import '../global.css';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { AuthProvider } from '@/contexts/AuthContext';
+import { NotificationProvider } from '@/contexts/NotificationContext';
 
 export default function RootLayout() {
   return (
     <AuthProvider>
+      <NotificationProvider>
       <StatusBar style="light" backgroundColor="#0D1527" />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -68,6 +70,7 @@ export default function RootLayout() {
           }}
         />
       </Stack>
+      </NotificationProvider>
     </AuthProvider>
   );
 }

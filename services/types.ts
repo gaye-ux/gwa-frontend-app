@@ -115,13 +115,17 @@ export interface TicketPurchase {
   id: string;
   eventId: string;
   eventName: string;
-  tier: string;
-  price: string;
+  eventDate: string;
+  ticketTierId: string;
+  ticketName: string;
   quantity: number;
-  total: string;
-  purchaseDate: string;
+  totalPrice: number;
+  currency: string;
+  status: string;
   qrCode: string;
-  status: 'active' | 'used' | 'cancelled';
+  purchasedAt: string;
+  venue: string;
+  image: any;
 }
 
 export interface AppNotification {

@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import SectionHeader from './SectionHeader';
 import { arenaPulseArticles, ArenaPulseArticle } from '@/services/homeData';
+import type { NewsArticle } from '@/services/types';
 
 // ---------------------------------------------------------------------------
 // Single article row
@@ -53,16 +54,18 @@ function ArticleRow({ article }: { article: ArenaPulseArticle }) {
 // ---------------------------------------------------------------------------
 // ArenaPulse
 // ---------------------------------------------------------------------------
-export default function ArenaPulse() {
+interface Props { articles?: NewsArticle[] }
+export default function ArenaPulse({ articles: propArticles }: Props) {
+    const articles = propArticles && propArticles.length > 0 ? propArticles : arenaPulseArticles;
     return (
         <View className="mt-8">
             <SectionHeader title="THE ARENA PULSE" titleStyle="serif" />
 
             <View className="mx-4 bg-gwa-card rounded-2xl overflow-hidden border border-gwa-border">
-                {arenaPulseArticles.map((article, index) => (
+                {articles.map((article, index) => (
                     <View key={article.id}>
                         <ArticleRow article={article} />
-                        {index < arenaPulseArticles.length - 1 && (
+                        {index < articles.length - 1 && (
                             <View className="h-px bg-gwa-border mx-4" />
                         )}
                     </View>

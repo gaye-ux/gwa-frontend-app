@@ -1,4 +1,4 @@
-import { Wrestler, Ekiri, Combat, HeadToHead, GwaEvent, TicketTier, AppNotification, NewsArticle, SeasonEvent, ArenaMatch, RankingCategory } from './types';
+import { Wrestler, Ekiri, Combat, HeadToHead, GwaEvent, TicketTier, TicketPurchase, AppNotification, NewsArticle, SeasonEvent, ArenaMatch, RankingCategory } from './types';
 
 // ============================================================================
 // WRESTLERS
@@ -828,6 +828,45 @@ export function getWrestlersByEkiri(ekiriId: string): Wrestler[] {
 export function getWrestlerCombatHistory(wrestlerId: string): Combat[] {
   return combats.filter((c) => c.fighter1Id === wrestlerId || c.fighter2Id === wrestlerId);
 }
+
+// ============================================================================
+// TICKET PURCHASES (mock)
+// ============================================================================
+
+export const mockTicketPurchases: TicketPurchase[] = [
+  {
+    id: 'tp-1',
+    eventId: 'ev-1',
+    eventName: 'WRESTLING ROYAL RUMBLE 2025',
+    eventDate: '2025-12-20T19:00:00Z',
+    ticketTierId: 'vip-0',
+    ticketName: 'VIP',
+    quantity: 2,
+    totalPrice: 5000,
+    currency: 'GMD',
+    status: 'active',
+    qrCode: 'GWA-TP-1-A7X3K9M2',
+    purchasedAt: '2025-11-15T10:30:00Z',
+    venue: 'Independence Stadium, Bakau',
+    image: require('@/assets/images/hero_fighters.png'),
+  },
+  {
+    id: 'tp-2',
+    eventId: 'ev-3',
+    eventName: 'BATTLE OF THE TITANS',
+    eventDate: '2026-02-14T20:00:00Z',
+    ticketTierId: 'prem-1',
+    ticketName: 'Premium',
+    quantity: 4,
+    totalPrice: 6000,
+    currency: 'GMD',
+    status: 'active',
+    qrCode: 'GWA-TP-2-B4Y2L8N1',
+    purchasedAt: '2026-01-10T14:00:00Z',
+    venue: 'Box Bar Stadium, Brikama',
+    image: require('@/assets/images/hero_fighters.png'),
+  },
+];
 
 export function getMainEvent(): GwaEvent | undefined {
   return eventsData.find((e) => e.status === 'upcoming');

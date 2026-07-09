@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { currentEvent } from '@/services/homeData';
 import { useCountdown } from '@/hooks/useCountdown';
+import type { GwaEvent } from '@/services/types';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -34,9 +35,10 @@ function CountdownSeparator() {
 // ---------------------------------------------------------------------------
 // HeroBanner
 // ---------------------------------------------------------------------------
-export default function HeroBanner() {
+interface Props { event?: GwaEvent | null }
+export default function HeroBanner({ event: propEvent }: Props) {
     const router = useRouter();
-    const event = currentEvent;
+    const event = propEvent || currentEvent;
     const { days, hours, minutes } = useCountdown(event.countdownTarget);
 
     return (

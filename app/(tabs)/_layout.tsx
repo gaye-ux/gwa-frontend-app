@@ -152,6 +152,26 @@ export default function TabLayout() {
                 }}
             />
 
+            <Tabs.Screen
+                name="tickets"
+                options={{
+                    title: 'Tickets',
+                    tabBarIcon: ({ focused }) => (
+                        <TabIcon
+                            focused={focused}
+                            label="Tickets"
+                            icon={
+                                <Ionicons
+                                    name="ticket-outline"
+                                    size={24}
+                                    color={focused ? ACTIVE_COLOR : INACTIVE_COLOR}
+                                />
+                            }
+                        />
+                    ),
+                }}
+            />
+
         </Tabs>
     );
 }

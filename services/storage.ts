@@ -1,6 +1,4 @@
-// Storage abstraction — swap implementation easily
-// For production: install @react-native-async-storage/async-storage
-// or expo-secure-store and replace InMemoryStorage below.
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface StorageBackend {
   get(key: string): Promise<string | null>;
@@ -8,19 +6,17 @@ interface StorageBackend {
   remove(key: string): Promise<void>;
 }
 
-class InMemoryStorage implements StorageBackend {
-  private store = new Map<string, string>();
-
+class AsyncStorageBackend implements StorageBackend {
   async get(key: string): Promise<string | null> {
-    return this.store.get(key) ?? null;
+    return AsyncStorage.getItem(key);
   }
 
   async set(key: string, value: string): Promise<void> {
-    this.store.set(key, value);
+    await AsyncStorage.setItem(key, value);
   }
 
   async remove(key: string): Promise<void> {
-    this.store.delete(key);
+    await AsyncStorage.removeItem(key);
   }
 }
 
@@ -29,5 +25,5 @@ export const StorageKeys = {
   USER_DATA: '@gwa/user_data',
 };
 
-export const storage: StorageBackend = new InMemoryStorage();
+export const storage: StorageBackend = new AsyncStorageBackend();
 export type { StorageBackend };
